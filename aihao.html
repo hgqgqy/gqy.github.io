@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--标题-->
+    <title>首页</title>
+    <!--引入css-->
+    <link rel="stylesheet" href="css/index.css">
+    <!--引入jquery-->
+    <script src="js/jquery.js"></script>
+</head>
+<body>
+<!--浮动导航-->
+<div class="fudong">
+    <ul>
+        <li><a href="index.html">主页</a></li>
+        <li> <a href="jiaxiang.html">我的家乡</a></li>
+        <li> <a href="aihao.html">我的爱好</a></li>
+        <li><a href="register.html">注册</a></li>
+    </ul>
+</div>
+<!--头部内容-->
+<div class="top">
+    <div class="width1230 top1">
+        <div class="top-right">
+            <a href="#">English</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="#">网站地图</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="#">旧版主站</a>
+            <input type="text">
+        </div>
+    </div>
+    <!--logo以及滚动文字效果-->
+    <div class="width1230 logo">
+        <a href="index.html"><img src="img/logo.png"></a>
+        <div><marquee>欢迎来参观顾乔洋的个人网页</marquee></div>
+    </div>
+    <!--下拉菜单-->
+    <div class="width1230nei nav">
+        <ul id="jsddm">
+            <li>
+                <a href="index.html">网站首页</a>
+            </li>
+            <li>
+                <a href="jiaxiang.html">我的家乡</a>
+                <ul>
+                    <li><a href="#">家乡美食</a></li>
+                    <li><a href="#">家乡风景</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="aihao.html">我的爱好</a>
+            </li>
+            <li>
+                <a href="register.html">注册</a>
+            </li>
+        </ul>
+        <!--下拉菜单js-->
+        <script>
+            var timeout= 500;
+            var closetimer= 0;
+            var ddmenuitem= 0;
+            function jsddm_open()
+            {  jsddm_canceltimer();
+                jsddm_close();
+                ddmenuitem = $(this).find('ul').eq(0).css('visibility', 'visible');}
+            function jsddm_close()
+            {  if(ddmenuitem) ddmenuitem.css('visibility', 'hidden');}
+            function jsddm_timer()
+            {  closetimer = window.setTimeout(jsddm_close, timeout);}
+            function jsddm_canceltimer()
+            {  if(closetimer)
+            {  window.clearTimeout(closetimer);
+                closetimer = null;}}
+            $(document).ready(function()
+            {  $('#jsddm > li').bind('mouseover', jsddm_open);
+                $('#jsddm > li').bind('mouseout', jsddm_timer);});
+            document.onclick = jsddm_close;
+        </script>
+        <!--爱好左侧导航-->
+        <div class="gailan-left">
+            <dl>
+                <dt class="dl1">
+                    我的爱好
+                </dt>
+                <dd>
+                    <a href="#">萨克斯</a>
+                </dd>
+                <dd>
+                    <a href="#">书法</a>
+                </dd>
+                <dd>
+                    <a href="#">篮球</a>
+                </dd>
+                <dd>
+                    <a href="#">游戏</a>
+                </dd>
+            </dl>
+        </div>
+        <!--右侧面包屑导航-->
+        <div class="gailan-right">
+            <div>您现在的位置：<a href="aihao.html"> 我的爱好</a></div>
+            <h1>
+                我的爱好
+            </h1>
+            <p class="width214">
+                <img src="img/f1.jpg">
+                <a href="#">未央乐章</a>
+            </p>
+            <p class="width214">
+                <img src="img/f2.jpg">
+                <a href="#">未央乐章</a>
+            </p>
+            <p class="width214">
+                <img src="img/f3.jpg">
+                <a href="#">未央乐章</a>
+            </p>
+            <p class="width214">
+                <img src="img/f4.jpg">
+                <a href="#">大学生艺术节</a>
+            </p>
+            <p class="width214">
+                <img src="img/f5.jpg">
+                <a href="#">春联</a>
+            </p>
+            <p class="width214">
+                <img src="img/f6.jpg">
+                <a href="#">春联</a>
+            </p>
+            <p class="width214">
+                <img src="img/f7.jpg">
+                <a href="#">春联</a>
+            </p>
+            <p class="width214">
+                <img src="img/f8.jpg">
+                <a href="#">春联</a>
+            </p>
+        </div>
+    </div>
+</div>
+<!--底部导航-->
+<div class="footer">
+    <div>
+        <ul class="menu" id="menu">
+            <li>
+                <a href="index.html">网站首页</a>
+            </li>
+            <li><a href="jiaxiang.html">我的家乡</a>
+            </li>
+            <li>
+                <a href="aihao.html">我的爱好</a>
+            </li>
+            <li>
+                <a href="register.html">注册</a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+<!--获取当前时间js-->
+<script>
+    function getDate()
+    {
+        window.setTimeout(function(){
+            window.requestAnimationFrame(getDate)
+        },1000/2)
+        var d=new Date();
+        var year=d.getFullYear()  //获取年
+        var month=d.getMonth()+1;  //获取月，从 Date 对象返回月份 (0 ~ 11)，故在此处+1
+        var day=d.getDay()    //获取日
+        var days=d.getDate() //获取日期
+        var hour=d.getHours()   //获取小时
+        var minute=d.getMinutes()  //获取分钟
+        var second=d.getSeconds()   //获取秒
+
+        if(month<10) month="0"+month
+        if(days<10) days="0"+days
+        if(hour<10) hour="0"+hour
+        if(minute<10) minute="0"+minute
+        if(second<10) second="0"+second
+
+        var week=new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六")
+        var Tools=document.getElementById("Main")
+        var da='今天是'+year+" 年 "+month+" 月 "+days+" 日 "+week[day]+" "+hour+" : "+minute+" :"+second
+        Tools.innerHTML=da
+    }
+    getDate()
+
+</script>
+<!--版权所有-->
+<div class="center">
+    <p>
+
+        版权所有：顾乔洋
+    </p>
+    <p id="Main">
+
+    </p>
+
+</div>
+<!--html5音乐-->
+<embed src="video/2.mp3" style="width: 0px; height: 0px;">
+</body>
+</html>

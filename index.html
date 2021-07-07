@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--标题-->
+    <title>首页</title>
+    <!--引入css-->
+    <link rel="stylesheet" href="css/index.css">
+    <!--引入jquery-->
+    <script src="js/jquery.js"></script>
+</head>
+<body>
+<!--浮动导航-->
+<div class="fudong">
+    <ul>
+        <li><a href="index.html">主页</a></li>
+        <li> <a href="jiaxiang.html">我的家乡</a></li>
+        <li> <a href="aihao.html">我的爱好</a></li>
+        <li><a href="register.html">注册</a></li>
+    </ul>
+</div>
+<!--头部内容-->
+<div class="top">
+    <div class="width1230 top1">
+        <div class="top-right">
+                <a href="#">English</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="#">网站地图</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="#">旧版主站</a>
+            <input type="text">
+        </div>
+    </div>
+    <!--logo以及滚动文字效果-->
+    <div class="width1230 logo">
+        <a href="index.html"><img src="img/logo.png"></a>
+        <div><marquee>欢迎来参观顾乔洋的个人网页</marquee></div>
+    </div>
+    <!--下拉菜单-->
+    <div class="width1230nei nav">
+        <ul id="jsddm">
+            <li>
+                <a href="index.html">网站首页</a>
+            </li>
+            <li>
+                <a href="jiaxiang.html">我的家乡</a>
+                <ul>
+                    <li><a href="#">家乡美食</a></li>
+                    <li><a href="#">家乡风景</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="aihao.html">我的爱好</a>
+            </li>
+            <li>
+                <a href="register.html">注册</a>
+            </li>
+        </ul>
+        <!--下拉菜单js-->
+        <script>
+            var timeout= 500;
+            var closetimer= 0;
+            var ddmenuitem= 0;
+            function jsddm_open()
+            {  jsddm_canceltimer();
+                jsddm_close();
+                ddmenuitem = $(this).find('ul').eq(0).css('visibility', 'visible');}
+            function jsddm_close()
+            {  if(ddmenuitem) ddmenuitem.css('visibility', 'hidden');}
+            function jsddm_timer()
+            {  closetimer = window.setTimeout(jsddm_close, timeout);}
+            function jsddm_canceltimer()
+            {  if(closetimer)
+            {  window.clearTimeout(closetimer);
+                closetimer = null;}}
+            $(document).ready(function()
+            {  $('#jsddm > li').bind('mouseover', jsddm_open);
+                $('#jsddm > li').bind('mouseout', jsddm_timer);});
+            document.onclick = jsddm_close;
+        </script>
+        <!--图片轮播效果-->
+        <div class="wrapper">
+            <div id="focus">
+                <ul>
+                    <li><a href="" target="_blank"><img src="img/1.jpg" alt="#" /></a></li>
+                    <li><a href="" target="_blank"><img src="img/2.jpg" alt="#" /></a></li>
+                    <li><a href="" target="_blank"><img src="img/3.jpg" alt="#" /></a></li>
+                </ul>
+            </div>
+        </div>
+        <!--图片轮播js-->
+        <script type="text/javascript">
+            $(function() {
+                var sWidth = $("#focus").width(); //获取焦点图的宽度（显示面积）
+                var len = $("#focus ul li").length; //获取焦点图个数
+                var index = 0;
+                var picTimer;
+
+                //以下代码添加数字按钮和按钮后的半透明条，还有上一页、下一页两个按钮
+                var btn = "<div class='btnBg'></div><div class='btn'>";
+                for(var i=0; i < len; i++) {
+                    btn += "<span></span>";
+                }
+                btn += "</div><div class='preNext pre'></div><div class='preNext next'></div>";
+                $("#focus").append(btn);
+                $("#focus .btnBg").css("opacity",0.5);
+
+                //为小按钮添加鼠标滑入事件，以显示相应的内容
+                $("#focus .btn span").css("opacity",0.4).mouseover(function() {
+                    index = $("#focus .btn span").index(this);
+                    showPics(index);
+                }).eq(0).trigger("mouseover");
+
+                //上一页、下一页按钮透明度处理
+                $("#focus .preNext").css("opacity",0.2).hover(function() {
+                    $(this).stop(true,false).animate({"opacity":"0.5"},300);
+                },function() {
+                    $(this).stop(true,false).animate({"opacity":"0.2"},300);
+                });
+
+                //上一页按钮
+                $("#focus .pre").click(function() {
+                    index -= 1;
+                    if(index == -1) {index = len - 1;}
+                    showPics(index);
+                });
+
+                //下一页按钮
+                $("#focus .next").click(function() {
+                    index += 1;
+                    if(index == len) {index = 0;}
+                    showPics(index);
+                });
+
+                //图片为左右滚动，即所有li元素都是在同一排向左浮动，所以这里需要计算出外围ul元素的宽度
+                $("#focus ul").css("width",sWidth * (len));
+
+                //鼠标滑上焦点图时停止自动播放，滑出时开始自动播放
+                $("#focus").hover(function() {
+                    clearInterval(picTimer);
+                },function() {
+                    picTimer = setInterval(function() {
+                        showPics(index);
+                        index++;
+                        if(index == len) {index = 0;}
+                    },4000); //此4000代表自动播放的间隔，单位：毫秒
+                }).trigger("mouseleave");
+
+                //显示图片函数，根据接收的index值显示相应的内容
+                function showPics(index) { //普通切换
+                    var nowLeft = -index*sWidth; //根据index值计算ul元素的left值
+                    //使用animate()方法调整ul元素滚动到计算出的position
+                    $("#focus ul").stop(true,false).animate({"left":nowLeft},300);
+                    //为当前的按钮切换到选中的效果
+                    $("#focus .btn span").stop(true,false).animate({"opacity":"0.4"},300)
+                            .eq(index).stop(true,false).animate({"opacity":"1"},300);
+                }
+            });
+        </script>
+        <!--右侧家乡新闻列表样式-->
+        <div class="right1">
+            <div>
+                <a href="#">家乡新闻</a>
+            </div>
+            <ul>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>“知信、守信、用信” 苏州企业信用建设成效显著</a>
+                </li>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>百万人关注!任泽平首次站台!苏州这里将有大机遇……</a>
+                </li>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>让老年人出行不减速 苏州高速“适老专窗”受欢迎</a>
+                </li>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>我院赵丽丹法官获评 “苏州最美法官”</a>
+                </li>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>江苏发生一起事件,位置就在苏州,画面已经曝光</a>
+                </li>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>超劲爆!苏州机场、9号线…全部指向昆山</a>
+                </li>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>江苏发生一起事件,位置在苏州,整个人被卷入车底</a>
+                </li>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>为打响“苏州制造”贡献力量</a>
+                </li>
+                <li>
+                    <span>6-30</span><a href="#"><i></i>苏州这个城中村“走运了”,“喜迎”拆迁,村民一夜暴富</a>
+                </li>
+
+            </ul>
+        </div>
+        <!--个人爱好列表样式-->
+        <div class="box1">
+            <dl>
+                <dt>
+                    <a href="#">更多>></a>
+                    <h1>+个人爱好</h1>
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                           <a href="#"><i></i>萨克斯</a>
+                        </li>
+                        <li>
+                            <a href="#"><i></i>书法</a>
+                        </li>
+                        <li>
+                           <a href="#"><i></i>篮球</a>
+                        </li>
+                        <li>
+                            <a href="#"><i></i>旅游</a>
+                        </li>
+                        <li>
+                            <a href="#"><i></i>音乐</a>
+                        </li>
+                        <li>
+                           <a href="#"><i></i>游戏</a>
+                        </li>
+                        <li>
+                            <a href="#"><i></i>台球</a>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+        <!--学校新闻列表样式-->
+        <div class="box2">
+            <dl>
+                <dt>
+                    <a href="#">更多>></a>
+                <h1>+学校新闻</h1>
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                            <span>6-30</span><a href="#"><i></i>学校“红色中南·党史专家手稿展”正式开幕</a>
+                        </li>
+                        <li>
+                            <span>6-30</span><a href="#"><i></i>8000余名毕业生启航新征程投身强国伟业</a>
+                        </li>
+                        <li>
+                            <span>6-30</span><a href="#"><i></i>5000余名师生共同演绎红色经典，献礼建党百年</a>
+                        </li>
+                        <li>
+                            <span>6-30</span><a href="#"><i></i>学校召开党委巡察工作领导小组会议</a>
+                        </li>
+                        <li>
+                            <span>6-30</span><a href="#"><i></i>学校召开2021届毕业生座谈会</a>
+                        </li>
+                        <li>
+                            <span>6-30</span><a href="#"><i></i>校内外人士支持新闻学院艺术教育发展</a>
+                        </li>
+                        <li>
+                            <span>6-30</span><a href="#"><i></i>校农工党委员会顺利换届</a>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+        <!--个人简介图文样式-->
+        <div class="box3">
+            <dl>
+                <dt>
+                    <a href="biaoge.html">更多>></a>
+                    <h1>+个人简介</h1>
+                </dt>
+                <dd>
+                    <img src="img/QQ截图20210702135904.png" >
+                    <p>
+                        我的姓名是顾乔洋，来自中南财经政法大学的一名学生，开朗随和患有轻度网瘾。梦想是赚够了钱开一家自己的咖啡馆。我的QQ是439688301
+                    </p>
+                </dd>
+            </dl>
+        </div>
+        <!--九宫格效果-->
+        <div class="neirong2">
+            <ul class="neirong2-ul1">
+                <li class="l1">
+                    <a href="#">联系我们</a>
+                </li>
+                <li class="l2">
+                    <a href="#">地理位置</a>
+                </li>
+                <li class="l3">
+                    <a href="#">我的家乡</a>
+                </li>
+                <li class="l4">
+                    <a href="#">个人信息</a>
+                </li>
+                <li class="l5">
+                    <a href="#">网站地图</a>
+                </li>
+                <li class="l6">
+                    <a href="#">个人爱好</a>
+                </li>
+                <li class="l7">
+                    <a href="#">建党百年</a>
+                </li>
+                <li class="l8">
+                    <a href="#">获奖荣誉</a>
+                </li>
+                <li class="l9">
+                    <a href="#">学校介绍</a>
+                </li>
+            </ul>
+            <!--个人爱好超链接-->
+            <dl class="dl2">
+                <dt>个人爱好</dt>
+                <dd>
+                    <a href="#">萨克斯</a>
+                </dd>
+                <dd>
+                    <a href="#">书法</a>
+                </dd>
+                <dd>
+                    <a href="#">旅游</a>
+                </dd>
+                <dd>
+                </dd></dl>
+            <!--友情链接-->
+            <dl class="dl2">
+                <dt>友情链接</dt>
+                <dd>
+                    <a href="#">中华管乐网</a>
+                </dd>
+                <dd>
+                    <a href="#">书法介绍</a>
+                </dd>
+                <dd>
+                    <a href="#">游遍全世界</a>
+                </dd>
+
+            </dl>
+        </div>
+
+    </div>
+</div>
+<!--底部导航-->
+<div class="footer">
+    <div>
+        <ul class="menu" id="menu">
+            <li>
+                <a href="index.html">网站首页</a>
+            </li>
+            <li><a href="jiaxiang.html">我的家乡</a>
+            </li>
+            <li>
+                <a href="aihao.html">我的爱好</a>
+            </li>
+            <li>
+                <a href="register.html">注册</a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+<!--获取当前时间js-->
+<script>
+    function getDate()
+    {
+        window.setTimeout(function(){
+            window.requestAnimationFrame(getDate)
+        },1000/2)
+        var d=new Date();
+        var year=d.getFullYear()  //获取年
+        var month=d.getMonth()+1;  //获取月，从 Date 对象返回月份 (0 ~ 11)，故在此处+1
+        var day=d.getDay()    //获取日
+        var days=d.getDate() //获取日期
+        var hour=d.getHours()   //获取小时
+        var minute=d.getMinutes()  //获取分钟
+        var second=d.getSeconds()   //获取秒
+
+        if(month<10) month="0"+month
+        if(days<10) days="0"+days
+        if(hour<10) hour="0"+hour
+        if(minute<10) minute="0"+minute
+        if(second<10) second="0"+second
+
+        var week=new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六")
+        var Tools=document.getElementById("Main")
+        var da='今天是'+year+" 年 "+month+" 月 "+days+" 日 "+week[day]+" "+hour+" : "+minute+" :"+second
+        Tools.innerHTML=da
+    }
+    getDate()
+
+</script>
+<!--版权所有-->
+<div class="center">
+    <p>
+
+       版权所有：顾乔洋
+    </p>
+    <p id="Main">
+
+    </p>
+
+</div>
+<!--html5音乐-->
+<embed src="video/2.mp3" style="width: 0px; height: 0px;">
+</body>
+</html>
